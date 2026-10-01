@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <!-- Full-bleed square: iOS applies its own rounded mask. -->
+  <rect width="180" height="180" fill="#58585e"/>
+  <g stroke-width="12" stroke-linecap="round">
+    <line x1="50" y1="50" x2="130" y2="50" stroke="#e5484d"/>
+    <line x1="130" y1="50" x2="130" y2="130" stroke="#3e7bfa"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="50" cy="50" r="13"/>
+    <circle cx="130" cy="50" r="13"/>
+    <circle cx="50" cy="130" r="13"/>
+    <circle cx="130" cy="130" r="13"/>
+  </g>
+</svg>

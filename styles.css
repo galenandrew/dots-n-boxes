@@ -1,0 +1,354 @@
+:root {
+  --bg: #f6f3ee;
+  --surface: #ffffff;
+  --ink: #1f1d1a;
+  --muted: #6f6a62;
+  --border: #e3ddd3;
+  --dot: #2b2824;
+  --radius: 12px;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171614;
+    --surface: #22201d;
+    --ink: #f1ede6;
+    --muted: #a39d93;
+    --border: #36332e;
+    --dot: #ece7df;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.app {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  grid-template-areas:
+    'header header'
+    'board sidebar';
+  gap: 24px;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.app-header {
+  grid-area: header;
+}
+
+h1 {
+  margin: 0 0 4px;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.status {
+  margin: 0;
+  min-height: 1.5em;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--turn-color);
+}
+
+/* ---------- Board ---------- */
+
+.board-wrap {
+  grid-area: board;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.board {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dot {
+  fill: var(--dot);
+  pointer-events: none;
+}
+
+.box {
+  fill: transparent;
+  pointer-events: none;
+  transition: fill 200ms ease;
+}
+
+.box.filled {
+  fill: var(--box-color);
+  fill-opacity: 0.35;
+}
+
+.line {
+  stroke: var(--turn-color);
+  stroke-width: 6;
+  stroke-linecap: round;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.hit {
+  fill: transparent;
+  pointer-events: all;
+}
+
+.edge:not(.taken) .hit {
+  cursor: pointer;
+}
+
+/* Faint preview of the line under the cursor, in the current player's color. */
+.board:not(.over) .edge:not(.taken):hover .line {
+  opacity: 0.3;
+}
+
+.edge.taken .line {
+  stroke: var(--line-color);
+  opacity: 1;
+}
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel {
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.player-list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.player.active {
+  border-color: var(--turn-color);
+}
+
+.player.winner {
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+.player.winner .score::before {
+  content: '🏆 ';
+}
+
+.player-color {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+
+.player-color::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.player-color::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.player-color::-moz-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.player-name {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 6px;
+  font: inherit;
+  font-weight: 500;
+  color: inherit;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+
+.player-name:hover,
+.player-name:focus {
+  border-color: var(--border);
+  outline: none;
+}
+
+.score {
+  min-width: 2ch;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.remove {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+}
+
+.remove:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--border);
+}
+
+.remove:disabled {
+  visibility: hidden;
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  padding: 8px 14px;
+  color: var(--bg);
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease, transform 80ms ease;
+}
+
+button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ink) 82%, var(--bg));
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+button.secondary {
+  color: var(--ink);
+  background: transparent;
+  border-color: var(--border);
+}
+
+button.secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  border-color: var(--muted);
+}
+
+.hint {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* Native arrow is replaced with a gradient-drawn chevron so it can be inset from the edge. */
+select {
+  appearance: none;
+  font: inherit;
+  padding: 6px 36px 6px 10px;
+  color: var(--ink);
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    right 19px center,
+    right 14px center;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+select:hover {
+  border-color: var(--muted);
+  background-color: color-mix(in srgb, var(--ink) 4%, var(--surface));
+}
+
+@media (max-width: 760px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'header'
+      'board'
+      'sidebar';
+    padding: 20px 16px;
+  }
+}

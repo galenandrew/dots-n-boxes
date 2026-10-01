@@ -1,0 +1,9 @@
+{
+  "name": "simple-dots-n-boxes",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A simple browser-based Dots & Boxes game.",
+  "scripts": {
+    "test": "node --test"
+  }
+}

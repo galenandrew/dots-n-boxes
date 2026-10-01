@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dots &amp; Boxes</title>
+    <link rel="icon" href="icons/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="icons/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Dots &amp; Boxes" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app-header">
+        <h1>Dots &amp; Boxes</h1>
+        <p id="status" class="status" aria-live="polite"></p>
+      </header>
+
+      <section class="board-wrap">
+        <svg id="board" class="board" role="img"></svg>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>Players &amp; score</h2>
+          <ul id="player-list" class="player-list"></ul>
+          <button id="add-player" type="button" class="secondary">+ Add player</button>
+          <p class="hint">Adding or removing a player starts a new game.</p>
+        </section>
+
+        <section class="panel">
+          <h2>Game</h2>
+          <label class="field">
+            Grid size
+            <select id="grid-size">
+              <option value="3">3 × 3 dots</option>
+              <option value="4">4 × 4 dots</option>
+              <option value="5" selected>5 × 5 dots</option>
+              <option value="6">6 × 6 dots</option>
+              <option value="7">7 × 7 dots</option>
+              <option value="8">8 × 8 dots</option>
+            </select>
+          </label>
+          <button id="new-game" type="button">New game</button>
+        </section>
+      </aside>
+    </main>
+
+    <script src="src/game.js"></script>
+    <script src="src/confetti.js"></script>
+    <script src="src/main.js"></script>
+  </body>
+</html>
